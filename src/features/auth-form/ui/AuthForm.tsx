@@ -31,7 +31,13 @@ export function AuthForm() {
 
   useEffect(() => {
     if (isSuccess) {
-      setTokens(data)
+      setTokens({
+        accessToken: data.data.accessToken,
+        accessTokenExpiresAt: data.data.accessTokenExpiresAt,
+        refreshToken: data.data.refreshToken,
+        refreshTokenExpiresAt: data.data.refreshTokenExpiresAt,
+      })
+
       navigate('/')
     }
 
