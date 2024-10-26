@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import pluginQuery from '@tanstack/eslint-plugin-query'
 import importPlugin from 'eslint-plugin-import'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
@@ -11,6 +12,7 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
+      ...pluginQuery.configs['flat/recommended'],
       importPlugin.flatConfigs.recommended,
     ],
     files: ['**/*.{js,ts,tsx,cjs,mjs}'],
@@ -60,6 +62,7 @@ export default tseslint.config(
         },
       ],
       'import/no-unresolved': 'error',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
     settings: {
       'import/resolver': {
