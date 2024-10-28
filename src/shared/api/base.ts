@@ -1,58 +1,24 @@
-import { ofetch } from 'ofetch'
+import { z, ZodObject } from 'zod'
 
-class Api {
-  private baseUrl: string = import.meta.env.VITE_BASE_URL
-  private headers: HeadersInit = { 'Content-Type': 'application/json' }
+import { zDateTime } from '~/shared/lib/zod'
 
-  private getAuthHeaders(): HeadersInit {
-    const token = ''
-    return token ? { Authorization: `Bearer ${token}` } : {}
-  }
+const BaseEntity = z.object({
+  id: z.string().uuid().min(1),
+})
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`
-    const config = {
-      headers: {
-        ...this.headers,
-        ...this.getAuthHeaders(),
-      },
-      ...options,
-    }
-
-    try {
-      return await ofetch<T>(url, config)
-    } catch (error) {
-      throw Error((error as Error).message)
-    }
-  }
-
-  public get<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
-    const queryString = params
-      ? `?${new URLSearchParams(params).toString()}`
-      : ''
-    return this.request<T>(`${endpoint}${queryString}`, { method: 'GET' })
-  }
-
-  public post<T>(endpoint: string, body: unknown): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(body),
+const WithCreation = <T extends z.ZodRawShape>(zodObject: ZodObject<T>) =>
+  zodObject.merge(
+    z.object({
+      createdAt: zDateTime,
+      updatedAt: zDateTime.optional(),
     })
-  }
+  )
 
-  public put<T>(endpoint: string, body: unknown): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'PUT',
-      body: JSON.stringify(body),
+const WithAdditionalData = <T extends z.ZodRawShape>(zodObject: ZodObject<T>) =>
+  zodObject.merge(
+    z.object({
+      additionalData: z.unknown(),
     })
-  }
+  )
 
-  public delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' })
-  }
-}
-
-export const apiInstance = new Api()
+export { BaseEntity, WithCreation, WithAdditionalData }

@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { useLogin } from '~/shared/api/auth'
+import { useAuth } from '~/shared/lib/auth'
+import { dayjs } from '~/shared/lib/date'
 import { Button } from '~/shared/ui/button'
 import { Form, FormFieldItem } from '~/shared/ui/form'
 import { Input, InputProps } from '~/shared/ui/input'
 
 import { formConfig } from '../config'
-import { setTokens } from '../lib'
 import { formSchema } from '../model'
 
 export function AuthForm() {
+  const { setAccessToken, setRefreshToken } = useAuth()
   const navigate = useNavigate()
   const form = useForm<formSchema>(formConfig)
 
@@ -31,11 +33,13 @@ export function AuthForm() {
 
   useEffect(() => {
     if (isSuccess) {
-      setTokens({
-        accessToken: data.data.accessToken,
-        accessTokenExpiresAt: data.data.accessTokenExpiresAt,
-        refreshToken: data.data.refreshToken,
-        refreshTokenExpiresAt: data.data.refreshTokenExpiresAt,
+      setAccessToken({
+        accessToken: data.accessToken,
+        expires: dayjs(data.accessTokenExpiresAt).toDate(),
+      })
+      setRefreshToken({
+        refreshToken: data.refreshToken,
+        expires: dayjs(data.refreshTokenExpiresAt).toDate(),
       })
 
       navigate('/')
@@ -44,7 +48,15 @@ export function AuthForm() {
     if (isError) {
       toast.error(error.message)
     }
-  }, [isSuccess, isError, navigate, error, data])
+  }, [
+    isSuccess,
+    isError,
+    navigate,
+    error,
+    data,
+    setAccessToken,
+    setRefreshToken,
+  ])
 
   return (
     <Form<formSchema>

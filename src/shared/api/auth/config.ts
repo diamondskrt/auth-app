@@ -17,9 +17,4 @@ const AuthResponseData = z.object({
   refreshTokenExpiresAt: z.string().min(1),
 })
 
-const AuthResponse = z.object({
-  data: AuthResponseData,
-  message: z.string().min(1),
-})
-
-export { AuthCredentials, AuthResponseData, AuthResponse }
+export { AuthCredentials, AuthResponseData }

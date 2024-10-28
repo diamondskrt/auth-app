@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.js",
-    "css": "src/index.css",
+    "css": "src/app/index.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
@@ -15,6 +15,6 @@
     "utils": "~/shared/lib/utils",
     "ui": "~/shared/ui/shadcn",
     "lib": "~/shared/lib",
-    "hooks": "~/shared/hooks"
+    "hooks": "~/shared/lib"
   }
 }

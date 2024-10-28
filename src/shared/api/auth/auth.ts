@@ -1,13 +1,16 @@
-import { apiInstance } from '../base'
+import { apiInstance } from '../api'
 
-import { AuthCredentialsSchema, AuthResponseSchema } from './model'
+import { AuthCredentialsSchema, AuthResponseDataSchema } from './model'
 
 const authUrl = '/auth'
 
 const login = (
   credentials: AuthCredentialsSchema
-): Promise<AuthResponseSchema> => {
-  return apiInstance.post<AuthResponseSchema>(`${authUrl}/token`, credentials)
+): Promise<AuthResponseDataSchema> => {
+  return apiInstance.post<AuthResponseDataSchema>(
+    `${authUrl}/token`,
+    credentials
+  )
 }
 
 export { login }
