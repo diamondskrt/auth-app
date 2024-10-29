@@ -1,20 +1,21 @@
-import Cookies from 'js-cookie'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { AuthPage } from '~/pages/auth'
 import { ErrorPage } from '~/pages/error'
 import { HomePage } from '~/pages/home'
 
-import { ProtectedRoute } from './ProtectedRoute'
+import { MainLayout } from '../layouts'
 
-const isAuthenticated = Cookies.get('accessToken')
+import { ProtectedRoute } from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <ProtectedRoute isAuthenticated={Boolean(isAuthenticated)}>
-        <HomePage />
+      <ProtectedRoute>
+        <MainLayout>
+          <HomePage />
+        </MainLayout>
       </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,

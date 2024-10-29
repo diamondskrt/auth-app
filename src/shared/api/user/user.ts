@@ -1,4 +1,4 @@
-import { apiInstance } from '../base'
+import { apiInstance } from '../api'
 
 import { UpdateUserData, UserSchema } from './model'
 

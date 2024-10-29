@@ -1,16 +1,24 @@
 import { z } from 'zod'
 
-import { AbilityGroup } from '../ability-group'
+import { BaseEntity } from '../base'
 
-const User = z.object({
-  id: z.string().uuid().min(1),
-  email: z.string().min(1),
-  fullName: z.string().min(1),
-  username: z.string().min(1),
-  phone: z.string(),
-  isAdmin: z.boolean(),
-  abilityGroups: z.array(AbilityGroup),
-  merchantCode: z.string().min(1),
-})
+enum Role {
+  Admin = 'admin',
+  Merchant = 'merchant',
+  Operator = 'operator',
+  Worker = 'worker',
+}
 
-export { User }
+const User = BaseEntity.merge(
+  z.object({
+    email: z.string().min(1),
+    fullName: z.string().min(1),
+    username: z.string().min(1),
+    phone: z.string(),
+    isAdmin: z.boolean(),
+    abilityGroups: z.array(z.nativeEnum(Role)),
+    merchantCode: z.string().min(1),
+  })
+)
+
+export { User, Role }

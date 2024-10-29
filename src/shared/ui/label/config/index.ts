@@ -1,1 +1,1 @@
-export { labelVariants } from './constants'
+export { labelVariants } from './labelVariants'
