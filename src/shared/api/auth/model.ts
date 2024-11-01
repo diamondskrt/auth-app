@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import { AuthCredentials, AuthResponseData } from './config'
+import { AuthCredentialsSchema, AuthResponseDataSchema } from './config'
 
-type AuthCredentialsSchema = z.infer<typeof AuthCredentials>
+type AuthCredentials = z.infer<typeof AuthCredentialsSchema>
 
-type AuthResponseDataSchema = z.infer<typeof AuthResponseData>
+type AuthResponseData = z.infer<typeof AuthResponseDataSchema>
 
-export type { AuthCredentialsSchema, AuthResponseDataSchema }
+export type { AuthCredentials, AuthResponseData }

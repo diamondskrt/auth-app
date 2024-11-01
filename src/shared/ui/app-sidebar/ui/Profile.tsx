@@ -1,7 +1,7 @@
 import { ChevronsUpDownIcon } from 'lucide-react'
 
+import { getUserRole } from '~/shared/api/ability-group'
 import { useGetProfile } from '~/shared/api/profile'
-import { getUserRole } from '~/shared/api/user/lib'
 import { useAuth } from '~/shared/lib/auth'
 import { Avatar, AvatarImage, AvatarFallback } from '~/shared/ui/avatar'
 import {
@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '~/shared/ui/dropdown-menu'
+import { Skeleton } from '~/shared/ui/skeleton'
+import { Typography } from '~/shared/ui/typography'
 
 import { profileMenuItems } from '../config'
 
@@ -19,19 +21,27 @@ export function Profile() {
   const { clearTokens } = useAuth()
 
   const { data: user } = useGetProfile()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex items-center justify-between rounded-md p-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
           <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 rounded-md">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+            <Avatar className="h-10 w-10">
+              <AvatarImage src="/img/dog.png" />
+              <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <div>
-              <div>{user?.email}</div>
-              <div>{getUserRole(user)}</div>
-            </div>
+            {user ? (
+              <div className="flex flex-col">
+                <Typography>{user?.email}</Typography>
+                <Typography>{getUserRole(user?.abilityGroups)}</Typography>
+              </div>
+            ) : (
+              <div className="flex flex-col">
+                <Skeleton className="h-[20px] w-[130px]" />
+                <Skeleton className="h-[20px] w-[60px]" />
+              </div>
+            )}
           </div>
           <ChevronsUpDownIcon className="h-4 w-4 shrink-0" />
         </div>
@@ -39,9 +49,9 @@ export function Profile() {
       <DropdownMenuContent className="w-64">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {profileMenuItems.map(({ title }) => (
-          <DropdownMenuItem key={title} disabled>
-            {title}
+        {profileMenuItems.map(({ label }) => (
+          <DropdownMenuItem key={label} disabled>
+            {label}
           </DropdownMenuItem>
         ))}
         <DropdownMenuItem onClick={clearTokens}>Logout</DropdownMenuItem>

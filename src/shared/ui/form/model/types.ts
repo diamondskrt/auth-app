@@ -16,6 +16,7 @@ type FormFieldItemProps<P, TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>
   control: Control<TFieldValues>
   label?: string
+  required?: boolean
   componentProps: P
 }
 

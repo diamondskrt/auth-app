@@ -12,6 +12,7 @@ export function FormFieldItem<P, TFieldValues extends FieldValues>({
   control,
   name,
   label,
+  required,
   Component,
   componentProps,
 }: FormFieldItemProps<P, TFieldValues>) {
@@ -21,7 +22,11 @@ export function FormFieldItem<P, TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          {label && <FormLabel>{label}</FormLabel>}
+          {label && (
+            <FormLabel>
+              {label} {required && <span className="text-red-400">*</span>}
+            </FormLabel>
+          )}
           <FormControl>
             <Component {...field} {...componentProps} />
           </FormControl>

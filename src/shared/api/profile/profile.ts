@@ -1,11 +1,11 @@
-import { apiInstance } from '../api'
+import { apiInstance } from '../base'
 
-import { ProfileSchema } from './model'
+import { Profile } from './model'
 
 const version = '/v1'
 
-const getProfile = (): Promise<ProfileSchema> => {
-  return apiInstance.get<ProfileSchema>(`${version}/profile`)
+const getProfile = (): Promise<Profile> => {
+  return apiInstance.get<Profile>({ endpoint: `${version}/profile` })
 }
 
 export { getProfile }

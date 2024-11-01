@@ -1,3 +1,11 @@
-export { getUsers, getUserById, updateUser, deleteUser } from './user'
-export type { UserSchema, UpdateUserData } from './model'
-export { User } from './config'
+export type { User, UserUpsert, UserAbilityGroupAction } from './model'
+export { UserSchema, UserUpsertSchema, QueryKeys } from './config'
+export {
+  useGetUsersList,
+  useGetUserById,
+  useCreateUser,
+  useUpdateUser,
+  useDeleteUser,
+  useAttachUserAbilityGroup,
+  useDetachUserAbilityGroup,
+} from './queries'

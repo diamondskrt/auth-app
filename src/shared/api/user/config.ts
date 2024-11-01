@@ -1,24 +1,33 @@
 import { z } from 'zod'
 
-import { BaseEntity } from '../base'
+import { zDateTime } from '~/shared/lib/zod'
 
-enum Role {
-  Admin = 'admin',
-  Merchant = 'merchant',
-  Operator = 'operator',
-  Worker = 'worker',
-}
+import { AbilityGroupSchema } from '../ability-group'
+import { BaseEntity } from '../config'
 
-const User = BaseEntity.merge(
+const UserSchema = BaseEntity.merge(
   z.object({
-    email: z.string().min(1),
     fullName: z.string().min(1),
     username: z.string().min(1),
-    phone: z.string(),
-    isAdmin: z.boolean(),
-    abilityGroups: z.array(z.nativeEnum(Role)),
+    email: z.string().optional(),
+    phone: z.string().nullable().optional(),
+    password: z.string().optional(),
+    isAdmin: z.boolean().optional(),
+    abilityGroups: z.array(AbilityGroupSchema),
     merchantCode: z.string().min(1),
+    blockedAt: zDateTime.nullable().optional(),
+    blockedTo: z.string().optional(),
   })
 )
 
-export { User, Role }
+const UserUpsertSchema = UserSchema.omit({
+  isAdmin: true,
+  blockedTo: true,
+})
+
+enum QueryKeys {
+  UsersList = 'usersList',
+  User = 'user',
+}
+
+export { UserSchema, UserUpsertSchema, QueryKeys }

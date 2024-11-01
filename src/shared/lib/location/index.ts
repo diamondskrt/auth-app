@@ -1,0 +1,1 @@
+export { useLocationPath } from './lib'

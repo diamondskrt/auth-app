@@ -1,24 +1,94 @@
-import { z, ZodObject } from 'zod'
+import Cookies from 'js-cookie'
+import { ofetch } from 'ofetch'
 
-import { zDateTime } from '~/shared/lib/zod'
+import { dataFormatter, TJsonApiBody } from '~/shared/lib/data-formatter'
 
-const BaseEntity = z.object({
-  id: z.string().uuid().min(1),
-})
+class Api {
+  private baseUrl: string = import.meta.env.VITE_BASE_URL
+  private headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  }
 
-const WithCreation = <T extends z.ZodRawShape>(zodObject: ZodObject<T>) =>
-  zodObject.merge(
-    z.object({
-      createdAt: zDateTime,
-      updatedAt: zDateTime.optional(),
+  private getAuthHeaders(): HeadersInit {
+    const token = Cookies.get('accessToken')
+    return token ? { Authorization: `Bearer ${token}` } : {}
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: Omit<RequestInit, 'headers'> & { headers?: HeadersInit } = {},
+    deserialize = false
+  ): Promise<T> {
+    const url = `${this.baseUrl}${endpoint}`
+    const config = {
+      ...options,
+      headers: {
+        ...this.headers,
+        ...this.getAuthHeaders(),
+        ...options.headers,
+      },
+    }
+
+    try {
+      const res = await ofetch<{ data: T }>(url, config)
+      return deserialize
+        ? (dataFormatter.deserialize(res as TJsonApiBody) as T)
+        : res?.data
+    } catch (error) {
+      const errorMessage = (error as Error)?.message ?? 'Unknown error'
+      throw new Error(errorMessage)
+    }
+  }
+
+  public get<T>({
+    endpoint,
+    params,
+    deserialize,
+  }: {
+    endpoint: string
+    params?: Record<string, string>
+    deserialize?: boolean
+  }): Promise<T> {
+    const queryString = params
+      ? `?${new URLSearchParams(params).toString()}`
+      : ''
+    return this.request<T>(
+      `${endpoint}${queryString}`,
+      { method: 'GET' },
+      deserialize
+    )
+  }
+
+  public post<T>(endpoint: string, body: unknown): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        Accept: 'application/vnd.api+json',
+      },
     })
-  )
+  }
 
-const WithAdditionalData = <T extends z.ZodRawShape>(zodObject: ZodObject<T>) =>
-  zodObject.merge(
-    z.object({
-      additionalData: z.unknown(),
+  public patch<T>(endpoint: string, body: unknown): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        Accept: 'application/vnd.api+json',
+      },
     })
-  )
+  }
 
-export { BaseEntity, WithCreation, WithAdditionalData }
+  public delete<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/vnd.api+json',
+      },
+    })
+  }
+}
+
+export const apiInstance = new Api()

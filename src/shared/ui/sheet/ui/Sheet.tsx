@@ -6,4 +6,6 @@ const SheetTrigger = SheetPrimitive.Trigger
 
 const SheetClose = SheetPrimitive.Close
 
-export { Sheet, SheetTrigger, SheetClose }
+const SheetPortal = SheetPrimitive.Portal
+
+export { Sheet, SheetTrigger, SheetClose, SheetPortal }

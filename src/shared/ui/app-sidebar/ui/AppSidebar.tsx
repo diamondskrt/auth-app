@@ -6,11 +6,12 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '~/shared/ui/sidebar'
+import { ThemeSwitcher } from '~/shared/ui/theme-switcher'
+import { Typography } from '~/shared/ui/typography'
 
 import { menuItems } from '../config'
 
@@ -21,16 +22,19 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {menuItems.map(({ link, label, Icon }) => (
+                <SidebarMenuItem key={link}>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
+                    {link ? (
+                      <Link to={link}>
+                        <Icon />
+                        <Typography>{label}</Typography>
+                      </Link>
+                    ) : (
+                      <Typography>{label}</Typography>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -39,6 +43,10 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <div className="flex items-center gap-2 px-2">
+          <ThemeSwitcher />
+          <Typography>Dark theme</Typography>
+        </div>
         <Profile />
       </SidebarFooter>
     </Sidebar>
