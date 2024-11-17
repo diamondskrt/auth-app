@@ -7,9 +7,8 @@ import { cn } from '~/shared/lib/utils'
 import { sheetVariants } from '../config'
 import { SheetContentProps } from '../model'
 
+import { SheetPortal } from './Sheet'
 import { SheetOverlay } from './SheetOverlay'
-
-const SheetPortal = SheetPrimitive.Portal
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,

@@ -1,26 +1,81 @@
-import { apiInstance } from '../api'
+import { apiInstance } from '../base'
+import { Resource } from '../config'
+import { convertData } from '../lib'
+import { UUID } from '../model'
 
-import { UpdateUserData, UserSchema } from './model'
+import { UserAbilityGroupAction, User, UserUpsert } from './model'
 
 const version = '/v1'
 
-const getUsers = (): Promise<UserSchema[]> => {
-  return apiInstance.get<UserSchema[]>(`${version}/users`)
+const getUsersList = (
+  queryParams?: Record<string, string>
+): Promise<User[]> => {
+  return apiInstance.get<User[]>({
+    endpoint: `${version}/users`,
+    deserialize: true,
+    params: queryParams,
+  })
 }
 
-const getUserById = (userId: string): Promise<UserSchema> => {
-  return apiInstance.get<UserSchema>(`${version}/users/${userId}`)
+const getUserById = ({
+  userId,
+  queryParams,
+}: {
+  userId?: UUID
+  queryParams?: Record<string, string>
+}): Promise<User> | undefined => {
+  if (!userId) return
+  return apiInstance.get<User>({
+    endpoint: `${version}/users/${userId}`,
+    deserialize: true,
+    params: queryParams,
+  })
 }
 
-const updateUser = (
-  userId: string,
-  data: UpdateUserData
-): Promise<UserSchema> => {
-  return apiInstance.put<UserSchema>(`${version}/users/${userId}`, data)
+const createUser = (data: UserUpsert) => {
+  return apiInstance.post<User>(
+    `${version}/users`,
+    convertData({ resource: Resource.Users, data })
+  )
 }
 
-const deleteUser = (userId: string): Promise<void> => {
+const updateUser = ({
+  userId,
+  data,
+}: {
+  userId: UUID
+  data: Partial<UserUpsert>
+}): Promise<User> => {
+  return apiInstance.patch<User>(
+    `${version}/users/${userId}`,
+    convertData({ resource: Resource.Users, data, id: userId })
+  )
+}
+
+const deleteUser = (userId?: UUID): Promise<void> => {
   return apiInstance.delete<void>(`${version}/users/${userId}`)
 }
 
-export { getUsers, getUserById, updateUser, deleteUser }
+const attachUserAbilityGroup = (data: UserAbilityGroupAction) => {
+  return apiInstance.post<User>(
+    `${version}/users/${data.userId}/actions/ability-group/attach`,
+    data
+  )
+}
+
+const detachUserAbilityGroup = async (data: UserAbilityGroupAction) => {
+  return apiInstance.post<User>(
+    `${version}/users/${data.userId}/actions/ability-group/detach`,
+    data
+  )
+}
+
+export {
+  getUsersList,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  attachUserAbilityGroup,
+  detachUserAbilityGroup,
+}

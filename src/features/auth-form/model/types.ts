@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
-import { AuthCredentials, AuthResponseSchema } from '~/shared/api/auth'
+import { AuthCredentialsSchema, AuthResponseData } from '~/shared/api/auth'
 
-type formSchema = z.infer<typeof AuthCredentials>
+type formSchema = z.infer<typeof AuthCredentialsSchema>
 
 type SetTokenParams = Pick<
-  AuthResponseSchema['data'],
+  AuthResponseData,
   | 'accessToken'
   | 'accessTokenExpiresAt'
   | 'refreshToken'

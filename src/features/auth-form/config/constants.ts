@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { AuthCredentials } from '~/shared/api/auth'
+import { AuthCredentialsSchema } from '~/shared/api/auth'
 
 const formConfig = {
-  resolver: zodResolver(AuthCredentials),
+  resolver: zodResolver(AuthCredentialsSchema),
   defaultValues: {
     username: '',
     password: '',

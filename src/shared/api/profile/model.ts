@@ -1,5 +1,8 @@
-import { UserSchema } from '../user'
+import { Role } from '../ability-group'
+import { User } from '../user'
 
-interface ProfileSchema extends UserSchema {}
+interface Profile extends Omit<User, 'abilityGroups'> {
+  abilityGroups: Role[]
+}
 
-export type { ProfileSchema }
+export type { Profile }

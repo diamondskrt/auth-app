@@ -1,31 +1,26 @@
-import { Calendar, Home, Inbox } from 'lucide-react'
+import { Users, Group } from 'lucide-react'
 
 const menuItems = [
   {
-    title: 'Home',
-    url: '#',
-    icon: Home,
+    label: 'Users',
+    link: '/users',
+    Icon: Users,
   },
   {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
+    label: 'Roles group',
+    link: '/roles-group',
+    Icon: Group,
   },
 ]
 
 const profileMenuItems = [
   {
-    title: 'Profile',
-    url: '#',
+    label: 'Profile',
+    link: '#',
   },
   {
-    title: 'Settings',
-    url: '#',
+    label: 'Settings',
+    link: '#',
   },
 ]
 

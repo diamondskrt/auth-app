@@ -1,14 +1,14 @@
 import { z } from 'zod'
 
-import { AbilityGroup } from '../ability-group'
+import { AbilityGroupSchema } from '../ability-group'
 
-const AuthCredentials = z.object({
+const AuthCredentialsSchema = z.object({
   username: z.string().min(2),
   password: z.string().min(5),
 })
 
-const AuthResponseData = z.object({
-  abilityGroups: z.array(AbilityGroup),
+const AuthResponseDataSchema = z.object({
+  abilityGroups: z.array(AbilityGroupSchema),
   merchantCode: z.string().min(1),
   phone: z.string(),
   accessToken: z.string().min(1),
@@ -17,4 +17,4 @@ const AuthResponseData = z.object({
   refreshTokenExpiresAt: z.string().min(1),
 })
 
-export { AuthCredentials, AuthResponseData }
+export { AuthCredentialsSchema, AuthResponseDataSchema }

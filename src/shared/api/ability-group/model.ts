@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-import { AbilityGroup } from './config'
+import { AbilityGroupSchema } from './config'
 
-type AbilityGroupSchema = z.infer<typeof AbilityGroup>
+type AbilityGroup = z.infer<typeof AbilityGroupSchema>
 
-export type { AbilityGroupSchema }
+export type { AbilityGroup }

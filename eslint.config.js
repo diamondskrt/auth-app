@@ -1,6 +1,8 @@
 import js from '@eslint/js'
 import pluginQuery from '@tanstack/eslint-plugin-query'
+import prettierConfig from 'eslint-config-prettier'
 import importPlugin from 'eslint-plugin-import'
+import prettierPlugin from 'eslint-plugin-prettier'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
@@ -23,8 +25,11 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      prettier: prettierPlugin,
     },
     rules: {
+      'no-alert': 'error',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
@@ -62,7 +67,10 @@ export default tseslint.config(
         },
       ],
       'import/no-unresolved': 'error',
+      'import/no-cycle': ['error', { maxDepth: 1 }],
       '@typescript-eslint/no-empty-object-type': 'off',
+      'prettier/prettier': 'error',
+      ...prettierConfig.rules,
     },
     settings: {
       'import/resolver': {

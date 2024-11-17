@@ -1,0 +1,7 @@
+export { Dialog, DialogPortal, DialogTrigger, DialogClose } from './Dialog'
+export { DialogDescription } from './DialogDescription'
+export { DialogTitle } from './DialogTitle'
+export { DialogFooter } from './DialogFooter'
+export { DialogHeader } from './DialogHeader'
+export { DialogContent } from './DialogContent'
+export { DialogOverlay } from './DialogOverlay'

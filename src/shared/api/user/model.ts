@@ -1,10 +1,16 @@
 import { z } from 'zod'
 
-import { User } from './config'
+import { UUID } from '../model'
 
-type UserSchema = z.infer<typeof User>
+import { UserSchema, UserUpsertSchema } from './config'
 
-interface UpdateUserData
-  extends Omit<UserSchema, 'abilityGroups' | 'isAdmin'> {}
+type User = z.infer<typeof UserSchema>
 
-export type { UserSchema, UpdateUserData }
+type UserUpsert = z.infer<typeof UserUpsertSchema>
+
+type UserAbilityGroupAction = {
+  userId: UUID
+  abilityGroupIds: string[]
+}
+
+export type { User, UserUpsert, UserAbilityGroupAction }

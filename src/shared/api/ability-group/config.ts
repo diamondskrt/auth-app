@@ -1,8 +1,19 @@
 import { z } from 'zod'
 
-const AbilityGroup = z.object({
-  name: z.string(),
-  description: z.string(),
-})
+import { BaseEntity } from '../config'
 
-export { AbilityGroup }
+enum Role {
+  Admin = 'admin',
+  Merchant = 'merchant',
+  Operator = 'operator',
+  Worker = 'worker',
+}
+
+const AbilityGroupSchema = BaseEntity.merge(
+  z.object({
+    name: z.nativeEnum(Role),
+    description: z.string(),
+  })
+)
+
+export { AbilityGroupSchema, Role }
