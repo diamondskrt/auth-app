@@ -7,8 +7,8 @@ const menuItems = [
     Icon: Users,
   },
   {
-    label: 'Roles group',
-    link: '/roles-group',
+    label: 'Ability groups',
+    link: '/ability-groups',
     Icon: Group,
   },
 ]
