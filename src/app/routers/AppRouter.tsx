@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 
+import { AbilityGroupsListPage } from '~/pages/ability-groups'
 import { AuthPage } from '~/pages/auth'
 import { ErrorPage } from '~/pages/error'
 import {
@@ -45,6 +46,15 @@ const router = createBrowserRouter([
           {
             path: ':id/edit',
             element: <EditUserPage />,
+          },
+        ],
+      },
+      {
+        path: 'ability-groups',
+        children: [
+          {
+            index: true,
+            element: <AbilityGroupsListPage />,
           },
         ],
       },
