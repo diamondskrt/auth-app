@@ -12,7 +12,7 @@ class Api {
   }
 
   private getAuthHeaders(): HeadersInit {
-    const token = Cookies.get('accessToken')
+    const token = Cookies.get('auth-app/accessToken')
     return token ? { Authorization: `Bearer ${token}` } : {}
   }
 

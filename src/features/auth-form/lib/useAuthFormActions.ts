@@ -31,6 +31,8 @@ export function useAuthFormActions() {
         expires: dayjs(data.refreshTokenExpiresAt).toDate(),
       })
 
+      toast.success('Login successful')
+
       navigate('/')
     } catch (error) {
       handleError(error as Error)
