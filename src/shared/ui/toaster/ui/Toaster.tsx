@@ -29,6 +29,7 @@ const Toaster = ({ richColors, ...props }: ToasterProps) => {
       className="toaster group"
       toastOptions={toastOptions()}
       richColors={richColors}
+      visibleToasts={1}
       {...props}
     />
   )
