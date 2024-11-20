@@ -1,1 +1,2 @@
-export { useUsersListActions } from './useUsersListActions'
+export { useBlockUserAction } from './useBlockUserAction'
+export { useDeleteUserAction } from './useDeleteUserAction'

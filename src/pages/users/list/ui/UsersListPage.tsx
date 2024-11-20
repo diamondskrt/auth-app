@@ -1,12 +1,13 @@
 import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { useUsersListActions } from '~/entities/user'
 import { Button } from '~/shared/ui/button'
 import { Loader } from '~/shared/ui/loader'
 import { Pagination } from '~/shared/ui/pagination'
 import { Typography } from '~/shared/ui/typography'
 import { AppBar } from '~/widgets/app-bar'
+
+import { useUsersListActions } from '../lib'
 
 import { User } from './User'
 import { UserFilters } from './UserFilters'
