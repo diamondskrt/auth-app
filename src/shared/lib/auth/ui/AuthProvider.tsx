@@ -10,25 +10,25 @@ import {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    Boolean(Cookies.get('accessToken'))
+    Boolean(Cookies.get('auth-app/accessToken'))
   )
 
   const setAccessToken = ({ accessToken, expires }: AccessTokenParams) => {
-    Cookies.set('accessToken', accessToken, { expires })
+    Cookies.set('auth-app/accessToken', accessToken, { expires })
     setIsAuthenticated(true)
   }
 
   const removeAccessToken = () => {
-    Cookies.remove('accessToken')
+    Cookies.remove('auth-app/accessToken')
     setIsAuthenticated(false)
   }
 
   const setRefreshToken = ({ refreshToken, expires }: RefreshTokenParams) => {
-    Cookies.set('refreshToken', refreshToken, { expires })
+    Cookies.set('auth-app/refreshToken', refreshToken, { expires })
   }
 
   const removeRefreshToken = () => {
-    Cookies.remove('refreshToken')
+    Cookies.remove('auth-app/refreshToken')
   }
 
   const clearTokens = () => {
