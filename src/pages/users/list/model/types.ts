@@ -1,6 +1,8 @@
 import { UUID } from '~/shared/api/model'
 import { User } from '~/shared/api/user'
 
+type UserFiltersProps = React.HTMLAttributes<HTMLDivElement> & {}
+
 type OnBlockUserToggleParams = {
   userId?: UUID
   block: boolean
@@ -12,4 +14,4 @@ type UserProps = {
   deleteUser: (userId?: UUID) => void
 }
 
-export type { UserProps, OnBlockUserToggleParams }
+export type { UserProps, OnBlockUserToggleParams, UserFiltersProps }

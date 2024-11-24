@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { useLogin } from '~/shared/api/auth'
 import { useAuth } from '~/shared/lib/auth'
 import { dayjs } from '~/shared/lib/date'
+import { handleError } from '~/shared/lib/handleError'
 
 import { formConfig } from '../config'
 import { formSchema } from '../model'
@@ -18,18 +19,22 @@ export function useAuthFormActions() {
   const { mutateAsync: login, isPending, isError, error } = useLogin()
 
   const onSubmit = async (values: formSchema) => {
-    const data = await login(values)
+    try {
+      const data = (await login(values))?.data
 
-    setAccessToken({
-      accessToken: data.accessToken,
-      expires: dayjs(data.accessTokenExpiresAt).toDate(),
-    })
-    setRefreshToken({
-      refreshToken: data.refreshToken,
-      expires: dayjs(data.refreshTokenExpiresAt).toDate(),
-    })
+      setAccessToken({
+        accessToken: data.accessToken,
+        expires: dayjs(data.accessTokenExpiresAt).toDate(),
+      })
+      setRefreshToken({
+        refreshToken: data.refreshToken,
+        expires: dayjs(data.refreshTokenExpiresAt).toDate(),
+      })
 
-    navigate('/')
+      navigate('/')
+    } catch (error) {
+      handleError(error as Error)
+    }
   }
 
   useEffect(() => {

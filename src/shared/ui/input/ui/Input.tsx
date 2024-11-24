@@ -6,10 +6,10 @@ import { inputClassName } from '../config'
 import { InputProps } from '../model'
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, value, type, ...props }, ref) => {
+  ({ className, value, defaultValue, type, ...props }, ref) => {
     return (
       <input
-        value={value ?? ''}
+        value={value ?? defaultValue ?? ''}
         type={type}
         className={cn(inputClassName, className)}
         ref={ref}

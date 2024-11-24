@@ -25,7 +25,7 @@ const buttonVariants = cva(
         default: tmc('h-9 px-4 py-2 [&>.button-icon]:h-4,w-4'),
         sm: tmc('h-8 rounded-md px-3 text-xs [&>.button-icon]:h-4,w-4'),
         lg: tmc('h-10 rounded-md px-8 [&>.button-icon]:h-5,w-5'),
-        icon: 'h-9 w-9',
+        icon: 'h-8 w-8',
       },
     },
     defaultVariants: {

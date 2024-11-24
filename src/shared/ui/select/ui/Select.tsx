@@ -1,3 +1,4 @@
+import { Cross2Icon } from '@radix-ui/react-icons'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import get from 'lodash.get'
 import * as React from 'react'
@@ -23,6 +24,7 @@ const Select = React.forwardRef<
       choiceLabel = 'label',
       choiceValue = 'value',
       onChange,
+      allowClear,
       ...props
     },
     ref
@@ -32,15 +34,25 @@ const Select = React.forwardRef<
       [choices, value, choiceValue]
     )
 
+    const onClear = (event: React.MouseEvent<SVGElement>) => {
+      event.stopPropagation()
+      onChange?.('')
+    }
+
     return (
-      <div ref={ref}>
-        <SelectPrimitive.Root {...props} onValueChange={onChange}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={placeholder} asChild>
-              <Typography className="text-foreground">
-                {get(selectedChoice, choiceLabel)}
-              </Typography>
-            </SelectValue>
+      <div ref={ref} className="w-full">
+        <SelectPrimitive.Root value={value} onValueChange={onChange} {...props}>
+          <SelectTrigger>
+            <div className="flex w-full items-center justify-between">
+              <SelectValue placeholder={placeholder} asChild>
+                <Typography className="text-foreground">
+                  {get(selectedChoice, choiceLabel)}
+                </Typography>
+              </SelectValue>
+              {allowClear && value && (
+                <Cross2Icon className="h-4 w-4" onPointerDown={onClear} />
+              )}
+            </div>
           </SelectTrigger>
           <SelectContent>
             {choices.length ? (

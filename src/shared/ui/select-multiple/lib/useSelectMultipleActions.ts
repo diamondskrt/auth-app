@@ -25,7 +25,7 @@ export function useSelectMultipleActions({
 
   const isSelectedChoice = useCallback(
     (selectedChoiceValue: string) =>
-      localValue.find((choiceValue) => choiceValue === selectedChoiceValue),
+      localValue.some((choiceValue) => choiceValue === selectedChoiceValue),
     [localValue]
   )
 

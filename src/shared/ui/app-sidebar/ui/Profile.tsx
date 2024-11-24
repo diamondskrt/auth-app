@@ -1,8 +1,6 @@
 import { ChevronsUpDownIcon } from 'lucide-react'
 
 import { getUserRole } from '~/shared/api/ability-group'
-import { useGetProfile } from '~/shared/api/profile'
-import { useAuth } from '~/shared/lib/auth'
 import { Avatar, AvatarImage, AvatarFallback } from '~/shared/ui/avatar'
 import {
   DropdownMenu,
@@ -16,11 +14,10 @@ import { Skeleton } from '~/shared/ui/skeleton'
 import { Typography } from '~/shared/ui/typography'
 
 import { profileMenuItems } from '../config'
+import { useProfileActions } from '../lib'
 
 export function Profile() {
-  const { clearTokens } = useAuth()
-
-  const { data: user } = useGetProfile()
+  const { user, clearTokens } = useProfileActions()
 
   return (
     <DropdownMenu>

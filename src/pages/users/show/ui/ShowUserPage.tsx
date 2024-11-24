@@ -1,46 +1,23 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { toast } from 'sonner'
+import { Link } from 'react-router-dom'
 
-import { UserInfo, useUsersListActions } from '~/entities/user'
-import { Resource } from '~/shared/api/config'
-import { useGetUserById } from '~/shared/api/user'
+import { UserInfo } from '~/entities/user'
 import { Button } from '~/shared/ui/button'
 import { Confirm } from '~/shared/ui/confirm'
 import { Loader } from '~/shared/ui/loader'
 import { Typography } from '~/shared/ui/typography'
 import { AppBar } from '~/widgets/app-bar'
 
-import { getBreadcrumbs } from '../lib'
+import { getBreadcrumbs, useShowUserActions } from '../lib'
 
 export function ShowUserPage() {
-  const { id } = useParams<{ id: string }>()
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-
   const {
-    isPending: isUserActionPending,
+    user,
+    isPending,
     onBlockUserToggle,
+    isConfirmOpen,
+    setIsConfirmOpen,
     onDeleteUser,
-  } = useUsersListActions()
-
-  const {
-    data: user,
-    isPending: isGetUserByIdPending,
-    isError,
-    error,
-  } = useGetUserById({
-    userId: id,
-    queryParams: {
-      include: `${Resource.AbilityGroups}`,
-    },
-  })
-
-  const isPending = isUserActionPending || isGetUserByIdPending
-
-  useEffect(() => {
-    if (!isError) return
-    toast.error(error.message)
-  }, [isError, error])
+  } = useShowUserActions()
 
   return (
     <>

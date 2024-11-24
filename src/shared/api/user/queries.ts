@@ -28,6 +28,7 @@ const useGetUsersList = (queryParams?: Record<string, string>) => {
   return useQuery({
     queryKey: [QueryKeys.UsersList, queryParams],
     queryFn: () => getUsersList(queryParams),
+    enabled: Boolean(queryParams),
   })
 }
 

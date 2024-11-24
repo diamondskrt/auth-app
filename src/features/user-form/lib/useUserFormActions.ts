@@ -1,5 +1,5 @@
 import omit from 'lodash.omit'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -9,6 +9,7 @@ import {
   useGetAbilityGroupList,
 } from '~/shared/api/ability-group'
 import { Resource } from '~/shared/api/config'
+import { UUID } from '~/shared/api/model'
 import {
   useCreateUser,
   useGetUserById,
@@ -16,6 +17,7 @@ import {
   useAttachUserAbilityGroup,
   useDetachUserAbilityGroup,
 } from '~/shared/api/user'
+import { handleError } from '~/shared/lib/handleError'
 import { useLocationPath } from '~/shared/lib/location'
 
 import { formConfig } from '../config'
@@ -39,7 +41,7 @@ export function useUserFormActions() {
     error: updateUserError,
   } = useUpdateUser()
   const {
-    data: user,
+    data: userData,
     isPending: isGetUserByIdPending,
     isError: isGetUserByIdError,
     error: getUserByIdError,
@@ -48,11 +50,12 @@ export function useUserFormActions() {
     queryParams: { include: `${Resource.AbilityGroups}` },
   })
   const {
-    data: abilityGroupList,
+    data: abilityGroupListData,
     isPending: isGetAbilityGroupListPending,
     isError: isGetAbilityGroupListError,
     error: getAbilityGroupListError,
   } = useGetAbilityGroupList()
+
   const {
     mutateAsync: attachUserAbilityGroup,
     isPending: isAttachUserAbilityGroupPending,
@@ -66,81 +69,118 @@ export function useUserFormActions() {
     error: detachUserAbilityGroupError,
   } = useDetachUserAbilityGroup()
 
-  const isPending =
-    (isEditRoute && isGetUserByIdPending) ||
-    isCreateUserPending ||
-    isUpdateUserPending ||
-    isGetAbilityGroupListPending ||
-    isAttachUserAbilityGroupPending ||
-    isDetachUserAbilityGroupPending
+  const isPending = useMemo(
+    () =>
+      (isEditRoute && isGetUserByIdPending) ||
+      isCreateUserPending ||
+      isUpdateUserPending ||
+      isGetAbilityGroupListPending ||
+      isAttachUserAbilityGroupPending ||
+      isDetachUserAbilityGroupPending,
+    [
+      isEditRoute,
+      isGetUserByIdPending,
+      isCreateUserPending,
+      isUpdateUserPending,
+      isGetAbilityGroupListPending,
+      isAttachUserAbilityGroupPending,
+      isDetachUserAbilityGroupPending,
+    ]
+  )
 
-  const isError =
-    isGetUserByIdError ||
-    isCreateUserError ||
-    isUpdateUserError ||
-    isGetAbilityGroupListError ||
-    isAttachUserAbilityGroupError ||
-    isDetachUserAbilityGroupError
+  const isError = useMemo(
+    () =>
+      isGetUserByIdError ||
+      isCreateUserError ||
+      isUpdateUserError ||
+      isGetAbilityGroupListError ||
+      isAttachUserAbilityGroupError ||
+      isDetachUserAbilityGroupError,
+    [
+      isGetUserByIdError,
+      isCreateUserError,
+      isUpdateUserError,
+      isGetAbilityGroupListError,
+      isAttachUserAbilityGroupError,
+      isDetachUserAbilityGroupError,
+    ]
+  )
 
-  const error =
-    getUserByIdError ||
-    createUserError ||
-    updateUserError ||
-    getAbilityGroupListError ||
-    attachUserAbilityGroupError ||
-    detachUserAbilityGroupError
+  const error = useMemo(
+    () =>
+      getUserByIdError ||
+      createUserError ||
+      updateUserError ||
+      getAbilityGroupListError ||
+      attachUserAbilityGroupError ||
+      detachUserAbilityGroupError,
+    [
+      getUserByIdError,
+      createUserError,
+      updateUserError,
+      getAbilityGroupListError,
+      attachUserAbilityGroupError,
+      detachUserAbilityGroupError,
+    ]
+  )
 
-  const upsertUserAbilityGroup = (abilityGroups: AbilityGroup[]) => {
-    const attachGroupIds = new Set(
-      user?.abilityGroups?.map(({ id }) => id as string) ?? []
+  const user = userData?.data
+  const abilityGroupList = abilityGroupListData?.data
+
+  const upsertUserAbilityGroup = async (
+    abilityGroups: AbilityGroup[],
+    upsertUserId: UUID = userId as UUID
+  ) => {
+    const currentGroupIds = new Set(
+      user?.abilityGroups?.map(({ id }) => id) ?? []
     )
-    const detachGroupIds = new Set(abilityGroups.map(({ id }) => id as string))
+    const newGroupIds = new Set(abilityGroups.map(({ id }) => id))
 
-    const attachAbilityGroupData = [...detachGroupIds].filter(
-      (id) => !attachGroupIds.has(id)
+    const attachGroupIds = Array.from(newGroupIds).filter(
+      (id) => !currentGroupIds.has(id)
     )
-    const detachAbilityGroupData = [...attachGroupIds].filter(
-      (id) => !detachGroupIds.has(id)
+    const detachGroupIds = Array.from(currentGroupIds).filter(
+      (id) => !newGroupIds.has(id)
     )
 
-    if (attachAbilityGroupData.length) {
-      attachUserAbilityGroup({
-        userId,
-        abilityGroupIds: attachAbilityGroupData,
-      })
-    }
-
-    if (detachAbilityGroupData.length) {
-      detachUserAbilityGroup({
-        userId,
-        abilityGroupIds: detachAbilityGroupData,
-      })
-    }
+    await Promise.all([
+      attachGroupIds.length &&
+        attachUserAbilityGroup({
+          userId: upsertUserId,
+          abilityGroupIds: attachGroupIds as string[],
+        }),
+      detachGroupIds.length &&
+        detachUserAbilityGroup({
+          userId: upsertUserId,
+          abilityGroupIds: detachGroupIds as string[],
+        }),
+    ])
   }
 
   const onSubmit = async (values: formSchema) => {
-    if (isEditRoute) {
-      await updateUser({
-        userId,
-        data: omit(values, Resource.AbilityGroups),
-      })
-      await upsertUserAbilityGroup(values.abilityGroups)
-      toast.success('User has been updated')
-    } else {
-      await createUser(omit(values, Resource.AbilityGroups))
-      toast.success('User has been created')
+    try {
+      if (isEditRoute) {
+        await updateUser({ userId, data: omit(values, Resource.AbilityGroups) })
+        await upsertUserAbilityGroup(values.abilityGroups)
+        toast.success('User has been updated')
+      } else {
+        const newUser = (await createUser(omit(values, Resource.AbilityGroups)))
+          ?.data
+        if (!newUser?.id) throw new Error('User creation failed')
+        await upsertUserAbilityGroup(values.abilityGroups, newUser.id)
+        toast.success('User has been created')
+      }
+      navigate('/users')
+    } catch (error) {
+      handleError(error as Error)
     }
-    navigate('/users')
   }
 
   const form = useForm<formSchema>(formConfig)
-
   const { reset } = form
 
   useEffect(() => {
-    if (user) {
-      reset(user)
-    }
+    if (user) reset(user)
   }, [user, reset])
 
   useEffect(() => {

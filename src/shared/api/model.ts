@@ -6,4 +6,17 @@ type Nullable<T> = T | null
 
 type UUID = z.infer<typeof UUIDSchema>
 
-export type { Nullable, UUID }
+type Page = {
+  currentPage: number
+  from: number
+  lastPage: number
+  perPage: number
+  to: number
+  total: number
+}
+
+type Meta = {
+  page: Page
+}
+
+export type { Nullable, UUID, Meta }

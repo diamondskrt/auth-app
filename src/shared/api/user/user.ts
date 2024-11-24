@@ -7,9 +7,7 @@ import { UserAbilityGroupAction, User, UserUpsert } from './model'
 
 const version = '/v1'
 
-const getUsersList = (
-  queryParams?: Record<string, string>
-): Promise<User[]> => {
+const getUsersList = (queryParams?: Record<string, string>) => {
   return apiInstance.get<User[]>({
     endpoint: `${version}/users`,
     deserialize: true,
@@ -23,8 +21,7 @@ const getUserById = ({
 }: {
   userId?: UUID
   queryParams?: Record<string, string>
-}): Promise<User> | undefined => {
-  if (!userId) return
+}) => {
   return apiInstance.get<User>({
     endpoint: `${version}/users/${userId}`,
     deserialize: true,
@@ -45,14 +42,14 @@ const updateUser = ({
 }: {
   userId: UUID
   data: Partial<UserUpsert>
-}): Promise<User> => {
+}) => {
   return apiInstance.patch<User>(
     `${version}/users/${userId}`,
     convertData({ resource: Resource.Users, data, id: userId })
   )
 }
 
-const deleteUser = (userId?: UUID): Promise<void> => {
+const deleteUser = (userId?: UUID) => {
   return apiInstance.delete<void>(`${version}/users/${userId}`)
 }
 
