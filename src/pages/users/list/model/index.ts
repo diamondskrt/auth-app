@@ -1,1 +1,5 @@
-export type { UserProps, OnBlockUserToggleParams } from './types'
+export type {
+  UserProps,
+  OnBlockUserToggleParams,
+  UserFiltersProps,
+} from './types'

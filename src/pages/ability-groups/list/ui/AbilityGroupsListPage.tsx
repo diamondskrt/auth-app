@@ -1,23 +1,11 @@
-import { Loader } from 'lucide-react'
-import { useEffect } from 'react'
-import { toast } from 'sonner'
-
-import { useGetAbilityGroupList } from '~/shared/api/ability-group'
+import { Loader } from '~/shared/ui/loader'
 import { Typography } from '~/shared/ui/typography'
 import { AppBar } from '~/widgets/app-bar'
 
-export function AbilityGroupsListPage() {
-  const {
-    data: abilityGroupList,
-    isPending,
-    isError,
-    error,
-  } = useGetAbilityGroupList()
+import { useAbilityGroupsListActions } from '../lib'
 
-  useEffect(() => {
-    if (!isError) return
-    toast.error(error?.message)
-  }, [isError, error])
+export function AbilityGroupsListPage() {
+  const { abilityGroupList, isPending } = useAbilityGroupsListActions()
 
   return (
     <>

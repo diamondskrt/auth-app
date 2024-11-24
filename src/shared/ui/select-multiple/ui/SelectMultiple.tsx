@@ -1,4 +1,5 @@
-import { ChevronDownIcon, CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
+import { CheckIcon, Cross2Icon } from '@radix-ui/react-icons'
+import * as SelectPrimitive from '@radix-ui/react-select'
 import get from 'lodash.get'
 import * as React from 'react'
 
@@ -7,11 +8,9 @@ import {
   Command,
   CommandList,
   CommandItem,
-  CommandEmpty,
+  commandItemClassName,
 } from '~/shared/ui/command'
-import { inputClassName } from '~/shared/ui/input'
-import { Popover, PopoverTrigger, PopoverContent } from '~/shared/ui/popover'
-import { selectTriggerClassName } from '~/shared/ui/select/config'
+import { SelectContent, SelectTrigger } from '~/shared/ui/select'
 import { Typography } from '~/shared/ui/typography'
 
 import { useSelectMultipleActions } from '../lib'
@@ -33,9 +32,8 @@ const SelectMultiple = React.forwardRef<
       loading,
       returnObject,
       maxCount = value.length,
-      onChange,
       className,
-      ...props
+      onChange,
     },
     ref
   ) => {
@@ -57,71 +55,60 @@ const SelectMultiple = React.forwardRef<
     })
 
     return (
-      <Popover>
-        <PopoverTrigger
-          disabled={disabled || loading}
-          className={cn(selectTriggerClassName)}
-          asChild
-        >
-          <div
-            ref={ref}
-            {...props}
-            className={cn(
-              inputClassName,
-              className,
-              (disabled || loading) && 'pointer-events-none'
-            )}
-          >
-            <div className="flex gap-1">
-              {slicedValue.length ? (
-                <div className="flex gap-1">
-                  {slicedValue.map((choiceValue, index) => (
-                    <div key={choiceValue} className="text-foreground">
-                      {get(foundChoice(choiceValue), choiceLabel)}
-                      {isCommaRequired(index) && ','}
-                    </div>
-                  ))}
-                  {Boolean(count) && <Typography>+{count}</Typography>}
-                </div>
-              ) : (
-                <Typography className="text-sm text-muted-foreground">
-                  {placeholder}
-                </Typography>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
+      <div ref={ref} className={cn('w-full', className)}>
+        <SelectPrimitive.Root disabled={disabled || loading}>
+          <SelectTrigger>
+            <div className="flex w-full items-center justify-between">
+              <div className="flex gap-1">
+                {slicedValue.length ? (
+                  <div className="flex gap-1">
+                    {slicedValue.map((choiceValue, index) => (
+                      <div key={choiceValue} className="text-foreground">
+                        {get(foundChoice(choiceValue), choiceLabel)}
+                        {isCommaRequired(index) && ','}
+                      </div>
+                    ))}
+                    {Boolean(count) && <Typography>+{count}</Typography>}
+                  </div>
+                ) : (
+                  <Typography className="text-sm text-muted-foreground">
+                    {placeholder}
+                  </Typography>
+                )}
+              </div>
               {allowClear && Boolean(slicedValue.length) && (
-                <Cross2Icon className="h-4 w-4" onClick={onClear} />
+                <Cross2Icon className="h-4 w-4" onPointerDown={onClear} />
               )}
-              <ChevronDownIcon className="h-4 w-4 opacity-50" />
             </div>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="p-1 shadow-none">
-          <Command>
-            <CommandList>
-              <CommandEmpty>
-                <Typography tag="p" className="text-center">
-                  No data
-                </Typography>
-              </CommandEmpty>
-              {choices.map((choice) => (
-                <CommandItem
-                  value={get(choice, choiceValue)}
-                  key={get(choice, choiceValue)}
-                  className="justify-between"
-                  onSelect={onValueChange}
-                >
-                  <Typography>{get(choice, choiceLabel)}</Typography>
-                  {isSelectedChoice(get(choice, choiceValue)) && (
-                    <CheckIcon className="h-4 w-4" />
-                  )}
-                </CommandItem>
-              ))}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+          </SelectTrigger>
+          <SelectContent>
+            <Command>
+              <CommandList>
+                {choices.length ? (
+                  choices.map((choice) => (
+                    <CommandItem key={get(choice, choiceValue)} asChild>
+                      <div
+                        key={get(choice, choiceValue)}
+                        className={cn(commandItemClassName)}
+                        onClick={() => onValueChange(get(choice, choiceValue))}
+                      >
+                        <span>{get(choice, choiceLabel)}</span>
+                        {isSelectedChoice(get(choice, choiceValue)) && (
+                          <CheckIcon className="h-4 w-4" />
+                        )}
+                      </div>
+                    </CommandItem>
+                  ))
+                ) : (
+                  <Typography tag="p" className="text-center">
+                    No data
+                  </Typography>
+                )}
+              </CommandList>
+            </Command>
+          </SelectContent>
+        </SelectPrimitive.Root>
+      </div>
     )
   }
 )

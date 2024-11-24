@@ -9,3 +9,4 @@ export {
   CommandShortcut,
   CommandSeparator,
 } from './ui'
+export { commandItemClassName } from './config'

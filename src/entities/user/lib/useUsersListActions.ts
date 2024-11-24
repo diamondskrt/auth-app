@@ -11,18 +11,22 @@ import {
   useUpdateUser,
 } from '~/shared/api/user'
 import { DATE_FORMAT_TEMPLATE } from '~/shared/lib/date'
+import { useQueryParams } from '~/shared/lib/query-params'
 import { ApiDateTime } from '~/shared/lib/zod/model'
 
 export function useUsersListActions() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const { queryParams } = useQueryParams()
+
   const {
-    data: users,
+    data,
     isPending: isGetUsersListPending,
     isError: isGetUsersListError,
     error: getUserError,
   } = useGetUsersList({
+    ...queryParams,
     include: `${Resource.AbilityGroups}`,
   })
   const {
@@ -73,9 +77,10 @@ export function useUsersListActions() {
   }, [isError, error])
 
   return {
-    users,
+    users: data?.data,
     isPending,
     onBlockUserToggle,
     onDeleteUser,
+    total: data?.meta?.page.total,
   }
 }

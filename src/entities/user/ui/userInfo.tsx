@@ -9,10 +9,19 @@ export function UserInfo({ user }: UserInfoProps) {
   return (
     <div className="flex flex-col gap-1">
       <Typography>
+        Fullname: <span className="text-primary">{user.fullName}</span>
+      </Typography>
+      <Typography>
         Username: <span className="text-primary">{user.username}</span>
       </Typography>
       <Typography>
         Merchant code: <span className="text-primary">{user.merchantCode}</span>
+      </Typography>
+      <Typography>
+        Status:{' '}
+        <span className="text-primary">
+          {user.blockedAt ? 'Blocked' : 'Active'}
+        </span>
       </Typography>
       {user.email && (
         <Typography>
