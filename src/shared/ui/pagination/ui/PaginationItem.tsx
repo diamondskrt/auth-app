@@ -8,11 +8,7 @@ const PaginationItem = React.forwardRef<
 >(({ className, disabled, ...props }, ref) => (
   <li
     ref={ref}
-    className={cn(
-      'cursor-pointer',
-      disabled && 'pointer-events-none opacity-50',
-      className
-    )}
+    className={cn(disabled && 'pointer-events-none opacity-50', className)}
     {...props}
   />
 ))

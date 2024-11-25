@@ -17,8 +17,8 @@ const Checkbox = React.forwardRef<
         <RadixCheckbox
           ref={ref}
           checked={value as boolean}
-          onCheckedChange={onChange}
           id={checkBoxId}
+          onCheckedChange={onChange}
           {...checkboxProps}
         />
         <div className="grid gap-1.5 leading-none">
