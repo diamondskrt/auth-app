@@ -1,4 +1,5 @@
 import { cn } from '~/shared/lib/utils'
+import { Button } from '~/shared/ui/button'
 import { Input } from '~/shared/ui/input'
 import { Select } from '~/shared/ui/select'
 
@@ -9,30 +10,43 @@ export function UserFilters({ className }: UserFiltersProps) {
   const {
     search,
     onSearchChange,
-    role,
+    roleQuery,
+    onRoleChange,
+    sortQuery,
+    sortChoices,
+    onSortChange,
     abilityGroupList,
     isPending,
-    onRoleChange,
+    clearQueryParams,
   } = useUserFilterActions()
 
   return (
     <div className={cn('flex gap-4', className)}>
       <Input
         value={search}
-        onChange={onSearchChange}
         disabled={isPending}
-        placeholder="Search"
+        placeholder="Username"
+        onChange={onSearchChange}
       />
       <Select
-        value={role}
+        allowClear
+        value={roleQuery}
         choices={abilityGroupList}
         choiceLabel="description"
         choiceValue="id"
         disabled={isPending}
         placeholder="Role"
-        allowClear
         onChange={onRoleChange}
       />
+      <Select
+        value={sortQuery}
+        choices={sortChoices}
+        placeholder="Sort"
+        onChange={onSortChange}
+      />
+      <Button variant="outline" onClick={clearQueryParams}>
+        Clear filters
+      </Button>
     </div>
   )
 }

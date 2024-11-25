@@ -9,10 +9,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, value, defaultValue, type, ...props }, ref) => {
     return (
       <input
+        ref={ref}
         value={value ?? defaultValue ?? ''}
         type={type}
         className={cn(inputClassName, className)}
-        ref={ref}
         {...props}
       />
     )

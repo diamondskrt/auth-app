@@ -44,7 +44,7 @@ const Select = React.forwardRef<
         <SelectPrimitive.Root value={value} onValueChange={onChange} {...props}>
           <SelectTrigger>
             <div className="flex w-full items-center justify-between">
-              <SelectValue placeholder={placeholder} asChild>
+              <SelectValue asChild placeholder={placeholder}>
                 <Typography className="text-foreground">
                   {get(selectedChoice, choiceLabel)}
                 </Typography>
@@ -58,8 +58,8 @@ const Select = React.forwardRef<
             {choices.length ? (
               choices.map((choice) => (
                 <SelectItem
-                  value={get(choice, choiceValue)}
                   key={get(choice, choiceValue)}
+                  value={get(choice, choiceValue)}
                 >
                   {get(choice, choiceLabel)}
                 </SelectItem>

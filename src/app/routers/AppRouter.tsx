@@ -17,7 +17,7 @@ import { ProtectedRoute } from './ProtectedRoute'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/users" replace />,
+    element: <Navigate replace to="/users" />,
   },
   {
     path: '/',

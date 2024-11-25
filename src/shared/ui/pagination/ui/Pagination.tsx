@@ -37,6 +37,7 @@ export function Pagination(props: PaginationProps) {
       <PaginationContent>
         <PaginationItem
           disabled={!hasPreviousPage}
+          className="cursor-pointer"
           onClick={() => setPage(page - 1)}
         >
           <PaginationPrevious />
@@ -49,7 +50,10 @@ export function Pagination(props: PaginationProps) {
         {pagesToRender.map((renderPage) => (
           <PaginationItem
             key={renderPage}
-            className={cn(isActivePage(renderPage) && 'pointer-events-none')}
+            className={cn(
+              'cursor-pointer',
+              isActivePage(renderPage) && 'pointer-events-none'
+            )}
             onClick={() => setPage(renderPage)}
           >
             <PaginationLink isActive={isActivePage(renderPage)}>
@@ -64,6 +68,7 @@ export function Pagination(props: PaginationProps) {
         )}
         <PaginationItem
           disabled={!hasNextPage}
+          className="cursor-pointer"
           onClick={() => setPage(page + 1)}
         >
           <PaginationNext />

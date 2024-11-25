@@ -31,9 +31,14 @@ export function useQueryParams() {
     [setSearchParams, queryParams]
   )
 
+  const clearQueryParams = () => {
+    setSearchParams({}, { replace: true })
+  }
+
   return {
     queryParams,
     getQueryParam,
     updateQueryParams,
+    clearQueryParams,
   }
 }

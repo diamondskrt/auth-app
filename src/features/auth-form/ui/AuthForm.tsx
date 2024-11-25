@@ -11,8 +11,8 @@ export function AuthForm() {
   return (
     <Form<formSchema>
       form={form}
-      onSubmit={form.handleSubmit(onSubmit)}
       className="form"
+      onSubmit={form.handleSubmit(onSubmit)}
     >
       <FormFieldItem<InputProps, formSchema>
         control={form.control}

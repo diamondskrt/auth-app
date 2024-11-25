@@ -17,14 +17,14 @@ export function UserForm() {
   return (
     <Form<formSchema>
       form={form}
-      onSubmit={form.handleSubmit(onSubmit)}
       className="form"
+      onSubmit={form.handleSubmit(onSubmit)}
     >
       <FormFieldItem<InputProps, formSchema>
+        required
         control={form.control}
         name="fullName"
         label="fullName"
-        required
         Component={Input}
         componentProps={{
           placeholder: 'fullName',
@@ -32,10 +32,10 @@ export function UserForm() {
         }}
       />
       <FormFieldItem<InputProps, formSchema>
+        required
         control={form.control}
         name="username"
         label="Username"
-        required
         Component={Input}
         componentProps={{
           placeholder: 'username',
@@ -63,9 +63,9 @@ export function UserForm() {
         }}
       />
       <FormFieldItem<InputProps, formSchema>
+        required
         control={form.control}
         label="Merchant code"
-        required
         name="merchantCode"
         Component={Input}
         componentProps={{
@@ -75,10 +75,10 @@ export function UserForm() {
       />
       {isCreateRoute && (
         <FormFieldItem<InputProps, formSchema>
+          required
           control={form.control}
           name="password"
           label="Password"
-          required
           Component={Input}
           componentProps={{
             placeholder: 'password',

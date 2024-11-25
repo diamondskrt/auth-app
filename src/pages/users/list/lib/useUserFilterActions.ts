@@ -13,10 +13,12 @@ export function useUserFilterActions() {
     error: getAbilityGroupListError,
   } = useGetAbilityGroupList()
 
-  const { queryParams, getQueryParam, updateQueryParams } = useQueryParams()
+  const { queryParams, getQueryParam, updateQueryParams, clearQueryParams } =
+    useQueryParams()
 
-  const searchQuery = getQueryParam('filter[fullNameLike]') || ''
-  const role = getQueryParam('filter[abilityGroups][id]') || ''
+  const searchQuery = getQueryParam('filter[usernameLike]') || ''
+  const roleQuery = getQueryParam('filter[abilityGroups][id]') || ''
+  const sortQuery = getQueryParam('sort') || ''
 
   const onUpdateQueryParams = (params: Record<string, string | null>) => {
     updateQueryParams({
@@ -44,6 +46,18 @@ export function useUserFilterActions() {
     debouncedSearchUpdate(event.target.value)
   }
 
+  const sortChoices = [
+    { label: 'Fullname:asc', value: 'fullName' },
+    { label: 'Fullname:desc', value: '-fullName' },
+  ]
+
+  const onSortChange = (value: string) => {
+    updateQueryParams({
+      ...queryParams,
+      sort: value || null,
+    })
+  }
+
   const onRoleChange = (value: string) => {
     onUpdateQueryParams({
       'filter[abilityGroups][id]': value || null,
@@ -58,9 +72,13 @@ export function useUserFilterActions() {
   return {
     search,
     onSearchChange,
-    role,
+    sortQuery,
+    sortChoices,
+    onSortChange,
+    roleQuery,
     onRoleChange,
     abilityGroupList: abilityGroupListData?.data ?? [],
     isPending,
+    clearQueryParams,
   }
 }

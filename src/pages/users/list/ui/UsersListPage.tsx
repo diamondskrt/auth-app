@@ -35,10 +35,10 @@ export function UsersListPage() {
               <div className="grid divide-y">
                 {users.map((user) => (
                   <User
-                    data={user}
                     key={user.id}
-                    onBlockUserToggle={onBlockUserToggle}
+                    data={user}
                     deleteUser={onDeleteUser}
+                    onBlockUserToggle={onBlockUserToggle}
                   />
                 ))}
               </div>
