@@ -23,6 +23,7 @@ export function UserFilters({ className }: UserFiltersProps) {
   return (
     <div className={cn('flex gap-4', className)}>
       <Input
+        allowClear
         value={search}
         disabled={isPending}
         placeholder="Username"
@@ -39,6 +40,7 @@ export function UserFilters({ className }: UserFiltersProps) {
         onChange={onRoleChange}
       />
       <Select
+        allowClear
         value={sortQuery}
         choices={sortChoices}
         placeholder="Sort"
