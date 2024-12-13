@@ -7,7 +7,7 @@ export function UserInfo({ user }: UserInfoProps) {
   if (!user) return <Typography>No data</Typography>
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="user-info flex flex-col gap-1">
       <Typography>
         Fullname: <span className="text-primary">{user.fullName}</span>
       </Typography>

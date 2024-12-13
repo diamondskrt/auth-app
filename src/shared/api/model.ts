@@ -19,4 +19,6 @@ type Meta = {
   page: Page
 }
 
-export type { Nullable, UUID, Meta }
+type HeadersInit = Record<string, string>
+
+export type { Nullable, UUID, Meta, HeadersInit }

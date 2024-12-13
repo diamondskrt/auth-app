@@ -3,7 +3,7 @@ import { ofetch } from 'ofetch'
 
 import { dataFormatter, TJsonApiBody } from '~/shared/lib/data-formatter'
 
-import { Meta } from './model'
+import { HeadersInit, Meta } from './model'
 
 class Api {
   private baseUrl: string = import.meta.env.VITE_BASE_URL
@@ -12,7 +12,7 @@ class Api {
   }
 
   private getAuthHeaders(): HeadersInit {
-    const token = Cookies.get('accessToken')
+    const token = Cookies.get('auth-app/accessToken')
     return token ? { Authorization: `Bearer ${token}` } : {}
   }
 

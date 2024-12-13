@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
-import { useUsersListActions } from '~/entities/user'
+import { useBlockUserAction, useDeleteUserAction } from '~/entities/user'
 import { Resource } from '~/shared/api/config'
 import { useGetUserById } from '~/shared/api/user'
+import { errorMessage } from '~/shared/config'
 
 export function useShowUserActions() {
   const { id } = useParams<{ id: string }>()
   const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
-  const {
-    isPending: isUserActionPending,
-    onBlockUserToggle,
-    onDeleteUser,
-  } = useUsersListActions()
+  const { onBlockUserToggle, isPending: isBlockUserPending } =
+    useBlockUserAction()
+
+  const { onDeleteUser, isPending: isDeleteUserPending } = useDeleteUserAction()
 
   const {
     data,
@@ -28,11 +28,12 @@ export function useShowUserActions() {
     },
   })
 
-  const isPending = isUserActionPending || isGetUserByIdPending
+  const isPending =
+    isBlockUserPending || isDeleteUserPending || isGetUserByIdPending
 
   useEffect(() => {
     if (!isError) return
-    toast.error(error.message)
+    toast.error(error?.message ?? errorMessage)
   }, [isError, error])
 
   return {

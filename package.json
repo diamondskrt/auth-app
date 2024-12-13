@@ -9,6 +9,8 @@
     "lint": "eslint . --fix --max-warnings=0",
     "format": "prettier . --write",
     "tsc": "tsc",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
     "commitlint": "commitlint --edit",
     "preview": "vite preview",
     "prepare": "husky"
@@ -61,6 +63,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^9.11.1",
+    "@playwright/test": "^1.48.2",
     "@tanstack/eslint-plugin-query": "^5.59.7",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash.get": "^4.4.9",

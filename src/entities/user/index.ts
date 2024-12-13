@@ -1,2 +1,2 @@
 export { UserInfo } from './ui'
-export { useUsersListActions } from './lib'
+export { useBlockUserAction, useDeleteUserAction } from './lib'

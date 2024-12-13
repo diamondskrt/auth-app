@@ -55,7 +55,7 @@ const SelectMultiple = React.forwardRef<
     })
 
     return (
-      <div ref={ref} className={cn('w-full', className)}>
+      <div ref={ref} className={cn('select-multiple w-full', className)}>
         <SelectPrimitive.Root disabled={disabled || loading}>
           <SelectTrigger>
             <div className="flex w-full items-center justify-between">
@@ -90,6 +90,7 @@ const SelectMultiple = React.forwardRef<
                       <div
                         key={get(choice, choiceValue)}
                         className={cn(commandItemClassName)}
+                        role="option"
                         onClick={() => onValueChange(get(choice, choiceValue))}
                       >
                         <span>{get(choice, choiceLabel)}</span>
